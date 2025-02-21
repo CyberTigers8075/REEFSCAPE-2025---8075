@@ -4,13 +4,18 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 public final class CTREConfigs {
+
+    //Swerve Configs
     public TalonFXConfiguration swerveAngleFXConfig = new TalonFXConfiguration();
     public TalonFXConfiguration swerveDriveFXConfig_right = new TalonFXConfiguration();
-    
 
     public CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
 
+    //Other Configs
+    public TalonFXConfiguration wristFXConfig = new TalonFXConfiguration();
+
     public CTREConfigs(){
+        //*Swerve Configuration */
         /** Swerve CANCoder Configuration */
         swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.Swerve.cancoderInvert;
 
@@ -68,5 +73,29 @@ public final class CTREConfigs {
         
         swerveDriveFXConfig_right.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Swerve.closedLoopRamp;
         swerveDriveFXConfig_right.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Swerve.closedLoopRamp;
+
+
+
+
+
+        /* Other configs */
+
+        wristFXConfig.MotorOutput.Inverted = Constants.wristConstants.wristMotorInvert;
+        wristFXConfig.MotorOutput.NeutralMode = Constants.wristConstants.wristNeutralMode;
+  
+        /* Gear Ratio and Wrapping Config */
+        wristFXConfig.Feedback.SensorToMechanismRatio = Constants.wristConstants.wristGearRatio;
+        wristFXConfig.ClosedLoopGeneral.ContinuousWrap = true;
+            
+        /* Current Limiting */
+        wristFXConfig.CurrentLimits.SupplyCurrentLimitEnable = Constants.wristConstants.wristEnableCurrentLimit;
+        wristFXConfig.CurrentLimits.SupplyCurrentLimit = Constants.wristConstants.wristCurrentLimit;
+  
+        /* PID Config */
+      
+        wristFXConfig.Slot0.kP = Constants.wristConstants.wristKP;
+        wristFXConfig.Slot0.kI = Constants.wristConstants.wristKI;
+        wristFXConfig.Slot0.kD = Constants.wristConstants.wristKD;
+  
     }
 }

@@ -173,88 +173,40 @@ public final class Constants {
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
 
-    public static final class CTREConfigs {
-        public static TalonFXConfiguration swerveAngleFXConfig = new TalonFXConfiguration();
-        public static TalonFXConfiguration swerveDriveFXConfig_right = new TalonFXConfiguration();
-    
+    public static final class wristConstants{
+         
+        /* Module Gear Ratios */
+        public static final double wristGearRatio = (1.0);
 
-        public CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
+        /** Radians per Second */
+        public static final double maxWristVelocity = 10.0; //TODO: This must be tuned to specific robot
 
-        public CTREConfigs(){
-            /** Swerve CANCoder Configuration */
-            swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants.Swerve.cancoderInvert;
+        /* Motor Inverts */
+        public static final InvertedValue wristMotorInvert = InvertedValue.CounterClockwise_Positive;
 
-            /** Swerve Angle Motor Configurations */
-            /* Motor Inverts and Neutral Mode */
-            swerveAngleFXConfig.MotorOutput.Inverted = Constants.Swerve.angleMotorInvert;
-            swerveAngleFXConfig.MotorOutput.NeutralMode = Constants.Swerve.angleNeutralMode;
+        /* Wrist Encoder Invert */
+        public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
 
-            /* Gear Ratio and Wrapping Config */
-            swerveAngleFXConfig.Feedback.SensorToMechanismRatio = Constants.Swerve.angleGearRatio;
-            swerveAngleFXConfig.ClosedLoopGeneral.ContinuousWrap = true;
-                
-            /* Current Limiting */
-            swerveAngleFXConfig.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.angleEnableCurrentLimit;
-            swerveAngleFXConfig.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.angleCurrentLimit;
-            swerveDriveFXConfig_right.CurrentLimits.SupplyCurrentLowerLimit = Constants.Swerve.driveCurrentThreshold;
-            swerveDriveFXConfig_right.CurrentLimits.SupplyCurrentLowerTime = Constants.Swerve.driveCurrentThresholdTime;
-            // BOOKMARK: SupplyLowerLimit and LowerTime were changed effectiev 1/15/25
+        /* Wrist Current Limiting */
+        public static final int wristCurrentLimit = 25;
+        public static final int wristCurrentThreshold = 40;
+        public static final double wristCurrentThresholdTime = 0.1;
+        public static final boolean wristEnableCurrentLimit = true;
 
-            /* PID Config */
-            swerveAngleFXConfig.Slot0.kP = Constants.Swerve.angleKP;
-            swerveAngleFXConfig.Slot0.kI = Constants.Swerve.angleKI;
-            swerveAngleFXConfig.Slot0.kD = Constants.Swerve.angleKD;
+        /* Wrist Motor PID Values */
+        public static final double wristKP = 10;
+        public static final double wristKI = 0.0;
+        public static final double wristKD = 0.0;
 
-            /** Swerve Drive Motor Configuration */
-            /* Motor Inverts and Neutral Mode */
-            
-            swerveDriveFXConfig_right.MotorOutput.Inverted = Constants.Swerve.rightDriverInverted;
-            swerveDriveFXConfig_right.MotorOutput.NeutralMode = Constants.Swerve.driveNeutralMode;
+        //private final MotorOutputConfigs m_configs = new MotorOutputConfigs();
 
-            /* Gear Ratio Config */
-            
-            swerveDriveFXConfig_right.Feedback.SensorToMechanismRatio = Constants.Swerve.driveGearRatio;
+        /* Neutral Modes */
+        public static final NeutralModeValue wristNeutralMode = NeutralModeValue.Coast;
 
-            /* Current Limiting */
-            
-            swerveDriveFXConfig_right.CurrentLimits.SupplyCurrentLimitEnable = Constants.Swerve.driveEnableCurrentLimit;
-            swerveDriveFXConfig_right.CurrentLimits.SupplyCurrentLimit = Constants.Swerve.driveCurrentLimit;
-            swerveDriveFXConfig_right.CurrentLimits.SupplyCurrentLowerLimit = Constants.Swerve.driveCurrentThreshold;
-            swerveDriveFXConfig_right.CurrentLimits.SupplyCurrentLowerTime = Constants.Swerve.driveCurrentThresholdTime;
-            // BOOKMARK: SupplyLowerLimit and LowerTime were changed effectiev 1/15/25
-
-            /* PID Config */
-            swerveDriveFXConfig_right.Slot0.kP = Constants.Swerve.driveKP;
-            swerveDriveFXConfig_right.Slot0.kI = Constants.Swerve.driveKI;
-            swerveDriveFXConfig_right.Slot0.kD = Constants.Swerve.driveKD;
-
-
-            /* Open and Closed Loop Ramping */
-            
-            swerveDriveFXConfig_right.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = Constants.Swerve.openLoopRamp;
-            swerveDriveFXConfig_right.OpenLoopRamps.VoltageOpenLoopRampPeriod = Constants.Swerve.openLoopRamp;
-
-            
-            swerveDriveFXConfig_right.ClosedLoopRamps.DutyCycleClosedLoopRampPeriod = Constants.Swerve.closedLoopRamp;
-            swerveDriveFXConfig_right.ClosedLoopRamps.VoltageClosedLoopRampPeriod = Constants.Swerve.closedLoopRamp;
-        }
+        //TODO: This must be tuned to specific motor
+        public static final int wristMotor = 1;
+        public static final int canCoderID = 0;
     }
-
-    //Pneumatic Intake Values
-    public static final int MODULE_NUMBER = 1;
     
-    public static final int FORWARD_CHANNEL_ONE = 0;
-    public static final int REVERSE_CHANNEL_ONE = 1;
-    
-    public static final int FORWARD_CHANNEL_TWO = 2;
-    public static final int REVERSE_CHANNEL_TWO = 3;
-
-    //Intake Values
-    public static final int INTAKE_MOTOR = 8;
-
-    //Climber Values
-    public static final int CLIMBER_MOTOR = 7;
-    
-   
     
     }
