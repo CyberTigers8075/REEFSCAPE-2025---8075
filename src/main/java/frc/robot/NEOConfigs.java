@@ -16,7 +16,7 @@ import com.revrobotics.*;
 /** Add your docs here. */
 public class NEOConfigs {
 
-    private SparkBaseConfig armConfig = new SparkMaxConfig();
+    public SparkBaseConfig armConfig = new SparkMaxConfig();
 
 
     public NEOConfigs(){
@@ -38,8 +38,11 @@ public class NEOConfigs {
     .i(0, ClosedLoopSlot.kSlot1)
     .d(0, ClosedLoopSlot.kSlot1)
     .velocityFF(1.0/5767, ClosedLoopSlot.kSlot1)
-    .outputRange(-1,1, ClosedLoopSlot.kSlot1);
-
+    .outputRange(-1,1, ClosedLoopSlot.kSlot1)
+    .maxMotion
+    .maxAcceleration(10000)
+    .maxVelocity(500)
+    .allowedClosedLoopError(.25);
 
     /* Apply the Config to the SparkMAX */
     }

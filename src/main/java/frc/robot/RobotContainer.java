@@ -27,7 +27,6 @@ import frc.robot.subsystems.*;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants;
-import frc.robot.commands.Drive;
 import choreo.auto.AutoChooser;
 import choreo.auto.*;
 
@@ -39,31 +38,42 @@ import choreo.auto.*;
  */
 public class RobotContainer {
     /* Controllers */
-    public final static Joystick driver = new Joystick(0);
+    public final static Joystick driver = new Joystick(Constants.DRIVER_JOYSTICK);
+    public final static Joystick mech = new Joystick(Constants.MECH_JOYSTICK);
+
 
     /* Drive Controls */
     public final static int translationAxis = XboxController.Axis.kLeftY.value;
     public final int strafeAxis = XboxController.Axis.kLeftX.value;
     public final static int rotationAxis = XboxController.Axis.kRightX.value;
     
-    //Joysticks
-    public static Joystick mechJoystick = new Joystick(Constants.MECH_JOYSTICK);
     // Buttons
-    public static Trigger mechX = new JoystickButton(mechJoystick, Constants.X);
+    public static Trigger mech5 = new JoystickButton(mech, 5);
+    public static Trigger mech6 = new JoystickButton(mech, 6);
+    public static Trigger mech7 = new JoystickButton(mech, 7);
+    public static Trigger mech8 = new JoystickButton(mech, 8);
+    public static Trigger mech9 = new JoystickButton(mech, 9);
+    public static Trigger mech10 = new JoystickButton(mech, 10);
+    public static Trigger mech11 = new JoystickButton(mech, 11);
+
+
+
+
 ;
     /* Driver Buttons */
     private Trigger driverA = new JoystickButton(driver, Constants.A);
     public final static JoystickButton robotCentric = new JoystickButton(driver, Constants.LB);
 
     /* Subsystems */
-    public static final Swerve s_Swerve = new Swerve();
+   // public static final Swerve s_Swerve = new Swerve();
+    public static final Arm arm = new Arm();
     
     /* autoChooser, forced to be depracated */
    // private final SendableChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
+    /*     s_Swerve.setDefaultCommand(
             new Drive(
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
@@ -71,6 +81,8 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
             ));
+*/
+        arm.setDefaultCommand(new ArmCommand(arm));
         
         
         // Configure the button bindings
@@ -86,10 +98,20 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        driverA.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+ //       driverA.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        mech5.onTrue(new InstantCommand(() -> arm.switchManualOn()));
+        mech6.onTrue(new InstantCommand(() -> arm.switchManualOff()));
+        mech7.onTrue(new InstantCommand(() -> arm.l2()));
+        mech8.onTrue(new InstantCommand(() -> arm.l1()));
+        mech9.onTrue(new InstantCommand(() -> arm.intake()));
+        mech10.onTrue(new InstantCommand(() -> arm.l3()));
+        mech11.onTrue(new InstantCommand(() -> arm.stow()));
+
+
+
     }
 
-    /**
+    /**)
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous

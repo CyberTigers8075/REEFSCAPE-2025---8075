@@ -36,6 +36,7 @@ public final class Constants {
     public static final int START = 8;
     public static final int DPAD_UP = 0;
     public static final int DPAD_DOWN = 180;
+    public static final int stickValue = 1;
     
     public static final class Swerve {
         public static final int navx = 1;
@@ -204,9 +205,18 @@ public final class Constants {
         public static final NeutralModeValue wristNeutralMode = NeutralModeValue.Coast;
 
         //TODO: This must be tuned to specific motor
-        public static final int wristMotor = 1;
+        public static final int wristMotor1 = 9;
+        public static final int wristMotor2 = 10;
         public static final int canCoderID = 0;
     }
     
-    
+    public static final class armConstants{
+        public static final int armMotorID1 = 1;
+        public static final int armMotorID2 = 2;
+        public static final double l1 = 10;
+        public static final double l2 = 20;
+        public static final double l3 = 30;
+        public static final double stow = 5;
+        public static final double intake = 0;
     }
+}
