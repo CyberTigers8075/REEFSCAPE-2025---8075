@@ -5,17 +5,16 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.WristNEO;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakePosition extends Command {
-          final Arm arm;
-  /** Creates a new Intake. */
-  public IntakePosition(Arm a) {
-    arm = a;
-    addRequirements(arm);
+public class WristCommand extends Command {
+  /** Creates a new Wrist. */
+  final WristNEO wrist;
+  public WristCommand(WristNEO w) {
     // Use addRequirements() here to declare subsystem dependencies.
+    wrist = w;
+    addRequirements(w); // TODO: WristNEO name is temoporary, change back if applicable
   }
 
   // Called when the command is initially scheduled.
@@ -25,8 +24,7 @@ public class IntakePosition extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-        arm.changePosition(Constants.armConstants.intake);
-
+    wrist.setPosition();
   }
 
   // Called once the command ends or is interrupted.

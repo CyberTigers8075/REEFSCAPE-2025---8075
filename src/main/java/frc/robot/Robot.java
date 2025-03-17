@@ -5,7 +5,21 @@
 package frc.robot;
 
 
+import java.nio.file.Path;
+
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.first.util.PixelFormat;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -23,6 +37,53 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  Thread m_visionThread;
+
+  DutyCycleEncoder encoder = new DutyCycleEncoder(4, 360.0, 1.0);
+  
+  public Robot(){
+  m_visionThread =
+      new Thread(
+          () -> {
+            // Create an HTTP camera. The address will need to be modified to have the correct
+            // team number. The exact path will depend on the source.
+            HttpCamera camera =
+                new HttpCamera("HTTP Camera", "http://10.80.75.11/video/stream.mjpg");
+            // Start capturing images
+            CameraServer.startAutomaticCapture(camera);
+            // Set the resolution
+            camera.setResolution(640, 480);
+
+            // Get a CvSink. This will capture Mats from the camera
+            CvSink cvSink = CameraServer.getVideo();
+            // Setup a CvSource. This will send images back to the Dashboard
+            CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+
+            // Mats are very memory expensive. Lets reuse this Mat.
+            Mat mat = new Mat();
+
+            // This cannot be 'true'. The program will never exit if it is. This
+            // lets the robot stop this thread when restarting robot code or
+            // deploying.
+            while (!Thread.interrupted()) {
+              // Tell the CvSink to grab a frame from the camera and put it
+              // in the source mat.  If there is an error notify the output.
+              if (cvSink.grabFrame(mat) == 0) {
+                // Send the output the error.
+                outputStream.notifyError(cvSink.getError());
+                // skip the rest of the current iteration
+                continue;
+              }
+              // Put a rectangle on the image
+              Imgproc.rectangle(
+                  mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
+              // Give the output stream a new image to display
+              outputStream.putFrame(mat);
+            }
+          });
+  m_visionThread.setDaemon(true);
+  m_visionThread.start();
+  }
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -32,7 +93,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    
+   // camera.setUsbCameraPath();
+    //camera.getPath();
+    //camera.setVideoMode(PixelFormat.kMJPEG, 640, 480, 30);
+ 
   }
 
   /**
@@ -49,6 +113,18 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    //SmartDashboard.putNumber("Arm Encoder", encoder.get());
+    //System.out.println("Here");
+    /* 
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[0].moduleNumber);
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[0].angleEncoder.getRotations());
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[1].moduleNumber);
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[1].angleEncoder.getRotations());
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[2].moduleNumber);
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[2].angleEncoder.getRotations());
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[3].moduleNumber);
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[3].angleEncoder.getRotations());
+    */
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

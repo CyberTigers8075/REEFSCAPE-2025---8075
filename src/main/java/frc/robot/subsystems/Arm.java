@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
@@ -20,6 +21,10 @@ import frc.robot.Constants;
 import frc.robot.NEOConfigs;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.armConstants;
+import frc.robot.subsystems.WristNEO;
+import com.revrobotics.spark.SparkBase;
+
 
 import com.revrobotics.spark.SparkBase.ResetMode;
 
@@ -30,41 +35,82 @@ public class Arm extends SubsystemBase {
   private SparkMax motor2;
   private SparkClosedLoopController closedLoopController1, closedLoopController2;
 
-  private SparkBaseConfig armConfig;
-  private RelativeEncoder encoder;
+  private AbsoluteEncoder encoder;
   public boolean manual;
-  double position;
+  //double position;
+  public String level;
 
   public Arm() {
-
+      
     motor1 = new SparkMax(Constants.armConstants.armMotorID1, MotorType.kBrushless);
-    motor2 = new SparkMax(Constants.armConstants.armMotorID2, MotorType.kBrushless);
+    //motor2 = new SparkMax(Constants.armConstants.armMotorID2, MotorType.kBrushless);
     
 
     motor1.configure(Robot.neoConfigs.armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    motor2.configure(Robot.neoConfigs.armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    //motor2.configure(Robot.neoConfigs.armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     closedLoopController1 = motor1.getClosedLoopController();
-    closedLoopController2 = motor2.getClosedLoopController();
+    //closedLoopController2 = motor2.getClosedLoopController();
 
 
+    encoder = motor1.getAbsoluteEncoder();
     manual = false;
-    position = 0;
-
+    //position = 0;
+    level = "stow";
   }
 
   public void setPosition(){
-
-    
-    closedLoopController1.setReference(position, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-    closedLoopController2.setReference(position, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-
     if(manual){
-      double positionChange = MathUtil.applyDeadband(RobotContainer.mech.getRawAxis(Constants.stickValue), Constants.stickDeadband);
-      position += positionChange;
+      double velocity = MathUtil.applyDeadband(RobotContainer.mech.getRawAxis(1), 0.1)  * 500;
+      if(velocity == 0){
+        motor1.setVoltage(-0.18);
+      } else {
+        if(encoder.getPosition() > 0.65 && velocity > 0){
+          motor1.setVoltage(-0.18);
+        } else if(encoder.getPosition() < .4 && velocity < 0){
+          motor1.setVoltage(-0.18);
+        } else {
+        closedLoopController1.setReference(-velocity, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+        }
+      }
+    //  System.out.println("sent:"+ velocity);
+    //  System.out.println("actual" + encoder.getVelocity());
+    //  System.out.println(encoder.getPosition());
     }
 
+    System.out.println("\n");
+
+    
   }
+
+ public void armToWristLimit(){
+    /*if(60 < position){
+      RobotContainer.wrist.retract();
+    }
+    if(position < 120){
+      RobotContainer.wrist.retract();
+    }
+    if(60 < position && 120 > position){
+      RobotContainer.wrist.stow();
+    }else if(!manual){
+        if (level == "l1"){
+            RobotContainer.wrist.l1();
+        }
+        if (level == "l2"){
+          RobotContainer.wrist.l2();
+        }
+        if (level == "l3"){
+          RobotContainer.wrist.l3();
+        }
+        if (level == "intake"){
+          RobotContainer.wrist.intake();
+        }
+      }
+   */
+  }   
+
+
+  
 
   public void switchManualOn(){
     manual = true;
@@ -75,29 +121,28 @@ public class Arm extends SubsystemBase {
   }
 
   public void changePosition(double pos){
-    position = pos;
+    //position = pos;
   }
 
   public void l1(){
-    this.changePosition(Constants.armConstants.l1);
+    closedLoopController1.setReference(Constants.armConstants.l1, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
   }
 
   public void l2(){
-    this.changePosition(Constants.armConstants.l2);
+    closedLoopController1.setReference(Constants.armConstants.l2, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
   }
 
   public void l3(){
-    this.changePosition(Constants.armConstants.l3);
+    closedLoopController1.setReference(Constants.armConstants.l3, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
   }
 
   public void intake(){
-    this.changePosition(Constants.armConstants.intake);
+    closedLoopController1.setReference(Constants.armConstants.intake, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
   }
 
   public void stow(){
-    this.changePosition(Constants.armConstants.stow);
+    closedLoopController1.setReference(Constants.armConstants.stow, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
   }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

@@ -56,7 +56,7 @@ public class Swerve extends SubsystemBase {
         try{
             config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
-                this::getPose, // Robot pose supplier
+                this::getPose, // Robot pose supplier\
                 this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
@@ -112,8 +112,8 @@ public class Swerve extends SubsystemBase {
                                     translation.getY(), 
                                     rotation/2)
                                 );
-        SmartDashboard.putNumber("X: ", translation.getX());
-        SmartDashboard.putNumber("Y: ", translation.getY());
+        SmartDashboard.putNumber("pose X: ", translation.getX());
+        SmartDashboard.putNumber("pose Y: ", translation.getY());
         SmartDashboard.putNumber("rotation", rotation);
 
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
@@ -155,9 +155,9 @@ public class Swerve extends SubsystemBase {
             return new Pose2d(0,0, new Rotation2d(0));
         }
 
-        SmartDashboard.putNumber("pose X", swerveOdometry.getPoseMeters().getX());
-        SmartDashboard.putNumber("pose Y", swerveOdometry.getPoseMeters().getY());
-        SmartDashboard.putNumber("gyro angle", gyro.getAngle());
+        SmartDashboard.putNumber("Robot Location Up/Down", swerveOdometry.getPoseMeters().getX());
+        SmartDashboard.putNumber("Robot Location Left/Right", swerveOdometry.getPoseMeters().getY());
+        SmartDashboard.putNumber("POV Driver Angle", gyro.getAngle());
 
 
         SmartDashboard.putNumber("gyro pitch", gyro.getPitch());
@@ -258,12 +258,12 @@ public class Swerve extends SubsystemBase {
         swerveOdometry.update(getGyroYaw(), getModulePositions());
 
         for(SwerveModule mod : mSwerveMods){
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
+            //SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Speed", mod.getState().speedMetersPerSecond); 
  
         }
-        SmartDashboard.putNumber("Robot Heading", getHeading().getDegrees());
+        SmartDashboard.putNumber("Robot Field Angle (Inversed)", getHeading().getDegrees());
         SmartDashboard.putString("Robot Location", getPose().getTranslation().toString());
     }
     

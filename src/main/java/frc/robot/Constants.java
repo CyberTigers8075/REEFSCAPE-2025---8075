@@ -37,6 +37,7 @@ public final class Constants {
     public static final int DPAD_UP = 0;
     public static final int DPAD_DOWN = 180;
     public static final int stickValue = 1;
+    public static final int hatValue = 2;
     
     public static final class Swerve {
         public static final int navx = 1;
@@ -61,7 +62,7 @@ public final class Constants {
         /* Motor Inverts */
         public static final InvertedValue angleMotorInvert = InvertedValue.CounterClockwise_Positive;
         public static final InvertedValue rightDriverInverted = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue leftDriverInverted = InvertedValue.CounterClockwise_Positive;
+        //public static final InvertedValue leftDriverInverted = InvertedValue.CounterClockwise_Positive;
 
         /* Angle Encoder Invert */
         public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
@@ -119,7 +120,7 @@ public final class Constants {
             public static final int driveMotorID = 4;
             public static final int angleMotorID = 3;
             public static final int canCoderID = 0;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.54
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.96
             );    
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -130,7 +131,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(.88
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-.62
             );;
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -141,7 +142,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 2;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.33
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.83
             );
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
@@ -152,7 +153,7 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(.21);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-.27);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -177,16 +178,16 @@ public final class Constants {
     public static final class wristConstants{
          
         /* Module Gear Ratios */
-        public static final double wristGearRatio = (1.0);
+        public static final double wristGearRatio = (31.5);
 
         /** Radians per Second */
-        public static final double maxWristVelocity = 10.0; //TODO: This must be tuned to specific robot
+        public static final double maxWristVelocity = 100.0; //TODO: This must be tuned to specific robot
 
         /* Motor Inverts */
         public static final InvertedValue wristMotorInvert = InvertedValue.CounterClockwise_Positive;
 
         /* Wrist Encoder Invert */
-        public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
+        public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.Clockwise_Positive;
 
         /* Wrist Current Limiting */
         public static final int wristCurrentLimit = 25;
@@ -205,18 +206,32 @@ public final class Constants {
         public static final NeutralModeValue wristNeutralMode = NeutralModeValue.Coast;
 
         //TODO: This must be tuned to specific motor
-        public static final int wristMotor1 = 9;
-        public static final int wristMotor2 = 10;
+        public static final int wristMotor5 = 5;
+        public static final int wristMotor6 = 6;
         public static final int canCoderID = 0;
+
+        public static final double l1 = 80;
+        public static final double l2 = 80;
+        public static final double l3 = 118;
+        public static final double stow = 360;
+        public static final double intake = 200;
+
     }
     
     public static final class armConstants{
         public static final int armMotorID1 = 1;
         public static final int armMotorID2 = 2;
-        public static final double l1 = 10;
-        public static final double l2 = 20;
-        public static final double l3 = 30;
-        public static final double stow = 5;
-        public static final double intake = 0;
+        public static final double l1 = .9;
+        public static final double l2 = .2;
+        public static final double l3 = .152;
+        public static final double stow = .32;
+        public static final double intake = .42;
+    }
+
+    public static final class intakeConstants{
+        public static final int intakeMotor3 = 3;
+        public static final int intakeMotor4 = 4;
+        public static final int intakeMotorID3 = 3;
+        public static final int intakeMotorID4 = 4;
     }
 }

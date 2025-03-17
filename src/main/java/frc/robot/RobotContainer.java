@@ -65,26 +65,27 @@ public class RobotContainer {
     public final static JoystickButton robotCentric = new JoystickButton(driver, Constants.LB);
 
     /* Subsystems */
-   // public static final Swerve s_Swerve = new Swerve();
+    public static final Swerve s_Swerve = new Swerve();
     public static final Arm arm = new Arm();
-    
+    //public static final WristNEO wrist = new WristNEO();
+    public static final Intake intake = new Intake();
     /* autoChooser, forced to be depracated */
    // private final SendableChooser<Command> autoChooser;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-    /*     s_Swerve.setDefaultCommand(
+          s_Swerve.setDefaultCommand(
             new Drive(
                 s_Swerve, 
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
-            ));
-*/
+            )); 
+
         arm.setDefaultCommand(new ArmCommand(arm));
-        
-        
+        //wrist.setDefaultCommand(new WristCommand(wrist));
+        intake.setDefaultCommand(new IntakeMovement(intake));
         // Configure the button bindings
         configureButtonBindings();
        
@@ -98,17 +99,26 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
- //       driverA.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driverA.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        /* Arm Bindings */
+        
         mech5.onTrue(new InstantCommand(() -> arm.switchManualOn()));
         mech6.onTrue(new InstantCommand(() -> arm.switchManualOff()));
-        mech7.onTrue(new InstantCommand(() -> arm.l2()));
+        /*mech7.onTrue(new InstantCommand(() -> arm.l2()));
         mech8.onTrue(new InstantCommand(() -> arm.l1()));
         mech9.onTrue(new InstantCommand(() -> arm.intake()));
         mech10.onTrue(new InstantCommand(() -> arm.l3()));
         mech11.onTrue(new InstantCommand(() -> arm.stow()));
-
-
-
+        
+       /*  Wrist Bindings */
+       //mech5.onTrue(new InstantCommand(() -> wrist.switchManualOn()));
+      // mech6.onTrue(new InstantCommand(() -> wrist.switchManualOff()));
+     /*   mech7.onTrue(new InstantCommand(() -> wrist.l2()));
+       mech8.onTrue(new InstantCommand(() -> wrist.l1()));
+       mech9.onTrue(new InstantCommand(() -> wrist.intake()));
+        mech10.onTrue(new InstantCommand(() -> wrist.l3()));
+        mech11.onTrue(new InstantCommand(() -> wrist.stow()));
+    */
     }
 
     /**)
@@ -160,5 +170,5 @@ public class RobotContainer {
     
 
         */
-        return new  PathPlannerAuto("New Auto 2");
+        return new  PathPlannerAuto("New New Auto");
 }}
