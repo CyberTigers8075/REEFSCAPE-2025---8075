@@ -24,6 +24,9 @@ public class SwerveModule {
     public TalonFX mDriveMotor;
     public DutyCycleEncoder angleEncoder;
 
+    public double maxSpeed = 7.5;
+    public double maxAngularVelocity = 5;
+
     private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     /* drive motor control requests */
@@ -69,7 +72,7 @@ public class SwerveModule {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
-            driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants.Swerve.maxSpeed;
+            driveDutyCycle.Output = desiredState.speedMetersPerSecond / maxSpeed;
             mDriveMotor.setControl(driveDutyCycle);
         }
         else {

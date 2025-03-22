@@ -46,8 +46,8 @@ public class Drive extends Command {
         /* Drive */
         
         s_Swerve.drive(
-            new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-            rotationVal * Constants.Swerve.maxAngularVelocity, 
+            new Translation2d(translationVal, strafeVal).times(s_Swerve.maxSpeed), 
+            rotationVal * s_Swerve.maxAngularVelocity, 
             !robotCentricSup.getAsBoolean(), 
             true
         );

@@ -39,6 +39,9 @@ public class Swerve extends SubsystemBase {
     public double rot;
     public boolean fieldRelative;
 
+    public double maxSpeed =7.5;
+    public double maxAngularVelocity = 5;
+
     public Swerve() {
         gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);
         gyro.zeroYaw();
@@ -91,12 +94,12 @@ public class Swerve extends SubsystemBase {
     public void driveRobotRelative(ChassisSpeeds speeds){
          
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates( speeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, maxSpeed);
         setModuleStates(swerveModuleStates);
         
     } 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
-        //fieldRelative ;
+        //fieldRelative = false;
         // TODO: figure if this command is relative to pathplanner
         trans = translation;
         SwerveModuleState[] swerveModuleStates =
@@ -116,7 +119,7 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putNumber("pose Y: ", translation.getY());
         SmartDashboard.putNumber("rotation", rotation);
 
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, maxSpeed);
         
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -126,7 +129,7 @@ public class Swerve extends SubsystemBase {
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Swerve.maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, maxSpeed);
         
 
         for(SwerveModule mod : mSwerveMods){

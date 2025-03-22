@@ -37,12 +37,12 @@ public class Intake extends SubsystemBase {
 
   public void intakeMovement(){
         if (RobotContainer.mech.getRawButton(1) && RobotContainer.mech.getRawButton(2)){
-      intakeMotor3.setVoltage(6);
-   intakeMotor4.setVoltage(-6);
+      intakeMotor3.setVoltage(-9);
+   intakeMotor4.setVoltage(9);
 
     }  else if (RobotContainer.mech.getRawButton(1)){
-      intakeMotor3.setVoltage(-6);
-   intakeMotor4.setVoltage(6);
+      intakeMotor3.setVoltage(9);
+   intakeMotor4.setVoltage(-9);
       
     } else {
       intakeMotor3.setVoltage(0);

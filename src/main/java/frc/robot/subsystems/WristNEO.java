@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase;
@@ -16,6 +17,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.NEOConfigs;
@@ -30,7 +32,7 @@ public class WristNEO extends SubsystemBase {
   private SparkMax motor5, motor6;
   private SparkClosedLoopController closedLoopController;
 
-  private RelativeEncoder encoder;
+  private AbsoluteEncoder encoder;
   public boolean manual;
   double position;
 
@@ -46,32 +48,41 @@ public class WristNEO extends SubsystemBase {
     closedLoopController = motor5.getClosedLoopController();
     //closedLoopController6 = motor6.getClosedLoopController();
 
-    encoder = motor5.getEncoder();
+    encoder = motor5.getAbsoluteEncoder();
 
     manual = false;
     position = encoder.getPosition();
 
-
   }
 
   public void setPosition(){
-    System.out.println("here");
- 
- 
-    //closedLoopController.setReference(position, ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
-    //closedLoopController4.setReference(position, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-    if(manual){
 
+    if(manual){
+      //Down
       if( (RobotContainer.mech.getPOV() < 90 || RobotContainer.mech.getPOV()> 270) && RobotContainer.mech.getPOV() != -1){
-        closedLoopController.setReference(1000, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+        if (!(encoder.getPosition() > .55)){
+          closedLoopController.setReference(-500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+        }
   
+        //UP
       } else if ( (RobotContainer.mech.getPOV() < 270 && RobotContainer.mech.getPOV() > 90)){
-        closedLoopController.setReference(-1000, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+        if (!(encoder.getPosition() >= .9) && !(encoder.getPosition() <.19)){
+          closedLoopController.setReference(500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+       }
       } else {
-        motor5.setVoltage(0);
+        closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+
       }
-      System.out.println(encoder.getPosition());
+    }else{
+      System.out.println("Wrist V: " + encoder.getVelocity());
+      if( encoder.getVelocity()<0 &&encoder.getPosition()<0.16){
+        closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+
+      }
     }
+    SmartDashboard.putNumber("Wrist Enc Pos: ", encoder.getPosition());
+    SmartDashboard.putNumber("Wrist Enc Vel: ", encoder.getVelocity());
+
 
     /*if(position < Constants.wristConstants.stow){
       position = Constants.wristConstants.stow;
@@ -102,11 +113,11 @@ public class WristNEO extends SubsystemBase {
   }
 
   public void l1(){
-    closedLoopController.setReference(Constants.wristConstants.l1, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    closedLoopController.setReference(.5/*Constants.wristConstants.l1*/, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
   }
 
   public void l2(){
-    closedLoopController.setReference(Constants.wristConstants.l2, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    closedLoopController.setReference(.66/*Constants.wristConstants.l2*/, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
   }
 
   public void l3(){
@@ -125,3 +136,5 @@ public class WristNEO extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 }
+
+//TODO: .027

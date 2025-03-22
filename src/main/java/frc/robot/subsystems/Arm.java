@@ -23,6 +23,7 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.armConstants;
 import frc.robot.subsystems.WristNEO;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.revrobotics.spark.SparkBase;
 
 
@@ -43,42 +44,38 @@ public class Arm extends SubsystemBase {
   public Arm() {
       
     motor1 = new SparkMax(Constants.armConstants.armMotorID1, MotorType.kBrushless);
-    //motor2 = new SparkMax(Constants.armConstants.armMotorID2, MotorType.kBrushless);
-    
 
     motor1.configure(Robot.neoConfigs.armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-    //motor2.configure(Robot.neoConfigs.armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
+    
     closedLoopController1 = motor1.getClosedLoopController();
-    //closedLoopController2 = motor2.getClosedLoopController();
-
-
     encoder = motor1.getAbsoluteEncoder();
     manual = false;
-    //position = 0;
     level = "stow";
   }
 
   public void setPosition(){
     if(manual){
       double velocity = MathUtil.applyDeadband(RobotContainer.mech.getRawAxis(1), 0.1)  * 500;
-      if(velocity == 0){
+      
+      if(-velocity == 0){
         motor1.setVoltage(-0.18);
-      } else {
-        if(encoder.getPosition() > 0.65 && velocity > 0){
+      }else { // BOOKMARK: 0.3 encoder, 0 velocity
+        if((encoder.getPosition() > 0.055 && velocity > 0) && !(encoder.getPosition() >0.9)){
           motor1.setVoltage(-0.18);
-        } else if(encoder.getPosition() < .4 && velocity < 0){
+          // BOOKMARK: 0.023 encoder, 0 velocity changed to 0.04 encoder into current
+        } else if(encoder.getPosition() < .04 && velocity < 0){
           motor1.setVoltage(-0.18);
         } else {
-        closedLoopController1.setReference(-velocity, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+          closedLoopController1.setReference(-velocity, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
         }
       }
-    //  System.out.println("sent:"+ velocity);
-    //  System.out.println("actual" + encoder.getVelocity());
-    //  System.out.println(encoder.getPosition());
+    
     }
+    SmartDashboard.putNumber("Arm Encoder", encoder.getPosition());
+    //System.out.println("Arm P: " + encoder.getPosition());
+    //System.out.println("Arm v: " + encoder.getVelocity());
 
-    System.out.println("\n");
+    //System.out.println("\n");
 
     
   }
@@ -125,11 +122,13 @@ public class Arm extends SubsystemBase {
   }
 
   public void l1(){
-    closedLoopController1.setReference(Constants.armConstants.l1, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    closedLoopController1.setReference(.60/*Constants.armConstants.l1*/, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    //if (encoder.getPosition() <)
+    System.out.println("------------------------------------------------------------------------------------------------------------------");
   }
 
   public void l2(){
-    closedLoopController1.setReference(Constants.armConstants.l2, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+    closedLoopController1.setReference(.5/*Constants.armConstants.l2*/, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1 );
   }
 
   public void l3(){

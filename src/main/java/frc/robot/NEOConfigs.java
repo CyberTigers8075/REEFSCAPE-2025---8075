@@ -37,22 +37,24 @@ public class NEOConfigs {
     .velocityConversionFactor(1);
     /* Configure the closed loop controller */
 
-    armConfig.closedLoop
+    armConfig.inverted(false).closedLoop
     .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
     .p(0.0001)
     .i(0.000001)
     .d(0)
+    //.velocityFF(0.004, ClosedLoopSlot.kSlot0)
     .outputRange(-1,1)
-    .p(0.128, ClosedLoopSlot.kSlot1)
+    .p(0.0008, ClosedLoopSlot.kSlot1)
     .i(0, ClosedLoopSlot.kSlot1)
     .d(0, ClosedLoopSlot.kSlot1)
+    .velocityFF(.0004,ClosedLoopSlot.kSlot1)
     .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
     .maxMotion.maxVelocity(1000)
     .maxAcceleration(10000)
     .allowedClosedLoopError(0.07)
-    .maxVelocity(2000, ClosedLoopSlot.kSlot1)
+    .maxVelocity(1000, ClosedLoopSlot.kSlot1)
     .maxAcceleration(10000, ClosedLoopSlot.kSlot1)
-    .allowedClosedLoopError(0.25, ClosedLoopSlot.kSlot1);
+    .allowedClosedLoopError(0.0001, ClosedLoopSlot.kSlot1);
     //.maxMotion
    // .maxAcceleration(10000)
     //.maxVelocity(500)
@@ -78,21 +80,23 @@ public class NEOConfigs {
  
 
     wristConfig.closedLoop
-    .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-    .p(0.0001)
-    .i(0.000001)
+    .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+    .p(0.13)
+    .i(0.00000)
     .d(0)
+    .velocityFF(0.0004)
     .outputRange(-1,1)
-    .p(0.128, ClosedLoopSlot.kSlot1)
+    .p(0.01, ClosedLoopSlot.kSlot1)
     .i(0, ClosedLoopSlot.kSlot1)
     .d(0, ClosedLoopSlot.kSlot1)
+    .velocityFF(0.0001, ClosedLoopSlot.kSlot1)
     .outputRange(-1, 1, ClosedLoopSlot.kSlot1)
     .maxMotion.maxVelocity(7000)
     .maxAcceleration(10000)
     .allowedClosedLoopError(0.25)
     .maxVelocity(7000, ClosedLoopSlot.kSlot1)
     .maxAcceleration(10000, ClosedLoopSlot.kSlot1)
-    .allowedClosedLoopError(0.25, ClosedLoopSlot.kSlot1);
+    .allowedClosedLoopError(0.001, ClosedLoopSlot.kSlot1);
     
     /* Apply the Config to the SparkMAX */
     }

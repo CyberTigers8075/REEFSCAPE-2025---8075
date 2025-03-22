@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
 
   DutyCycleEncoder encoder = new DutyCycleEncoder(4, 360.0, 1.0);
   
-  public Robot(){
+  public Robot(){/* 
   m_visionThread =
       new Thread(
           () -> {
@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
             }
           });
   m_visionThread.setDaemon(true);
-  m_visionThread.start();
+  m_visionThread.start();*/
   }
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -117,14 +117,15 @@ public class Robot extends TimedRobot {
     //System.out.println("Here");
     /* 
     System.out.println(RobotContainer.s_Swerve.mSwerveMods[0].moduleNumber);
-    System.out.println(RobotContainer.s_Swerve.mSwerveMods[0].angleEncoder.getRotations());
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[0].angleEncoder.isConnected());
     System.out.println(RobotContainer.s_Swerve.mSwerveMods[1].moduleNumber);
-    System.out.println(RobotContainer.s_Swerve.mSwerveMods[1].angleEncoder.getRotations());
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[1].angleEncoder.isConnected());
     System.out.println(RobotContainer.s_Swerve.mSwerveMods[2].moduleNumber);
-    System.out.println(RobotContainer.s_Swerve.mSwerveMods[2].angleEncoder.getRotations());
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[2].angleEncoder.isConnected());
     System.out.println(RobotContainer.s_Swerve.mSwerveMods[3].moduleNumber);
-    System.out.println(RobotContainer.s_Swerve.mSwerveMods[3].angleEncoder.getRotations());
+    System.out.println(RobotContainer.s_Swerve.mSwerveMods[3].angleEncoder.isConnected());
     */
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

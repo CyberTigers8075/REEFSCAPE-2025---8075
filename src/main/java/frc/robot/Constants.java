@@ -108,7 +108,7 @@ public final class Constants {
         /** Meters per Second */
         public static final double maxSpeed = 7.5; //TODO: This must be tuned to specific robot
         /** Radians per Second */
-        public static final double maxAngularVelocity = 5.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 20.0; //TODO: This must be tuned to specific robot
 
         /* Neutral Modes */
         public static final NeutralModeValue angleNeutralMode = NeutralModeValue.Coast;
@@ -131,8 +131,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-.62
-            );;
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.6);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -210,22 +209,22 @@ public final class Constants {
         public static final int wristMotor6 = 6;
         public static final int canCoderID = 0;
 
-        public static final double l1 = 80;
-        public static final double l2 = 80;
+        public static final double l1 = 0.314;
+        public static final double l2 = 0.153;
         public static final double l3 = 118;
         public static final double stow = 360;
-        public static final double intake = 200;
+        public static final double intake = 0.338;
 
     }
     
     public static final class armConstants{
         public static final int armMotorID1 = 1;
         public static final int armMotorID2 = 2;
-        public static final double l1 = .9;
-        public static final double l2 = .2;
+        public static final double l1 = .48;
+        public static final double l2 = .653;
         public static final double l3 = .152;
         public static final double stow = .32;
-        public static final double intake = .42;
+        public static final double intake = .405;
     }
 
     public static final class intakeConstants{
