@@ -16,6 +16,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.NEOConfigs;
@@ -55,20 +56,37 @@ public class Arm extends SubsystemBase {
 
   public void setPosition(){
     if(manual){
-      double velocity = MathUtil.applyDeadband(RobotContainer.mech.getRawAxis(1), 0.1)  * 500;
+      double velocity = -MathUtil.applyDeadband(RobotContainer.mech.getRawAxis(1), 0.1)  * 1000;
+      if( velocity == 0){
+        motor1.setVoltage(-0.25);
       
+      }else if((encoder.getPosition() < 0.01 && velocity > 0) || (encoder.getPosition() > 0.9)){
+        motor1.setVoltage(-0.25);
+      }else if((encoder.getPosition() > 0.3 && velocity < 0)){ //Upper limit: 0.043973
+        motor1.setVoltage(-0.25);
+      }else{
+        closedLoopController1.setReference(velocity, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+      }
+      SmartDashboard.putNumber("Velocity", velocity);
+
+      /* 
       if(-velocity == 0){
-        motor1.setVoltage(-0.18);
+        //motor1.setVoltage(-0.25);
+        motor1.stopMotor();
       }else { // BOOKMARK: 0.3 encoder, 0 velocity
-        if((encoder.getPosition() > 0.055 && velocity > 0) && !(encoder.getPosition() >0.9)){
-          motor1.setVoltage(-0.18);
+        if((encoder.getPosition() > 0.0 && velocity > 0) && !(encoder.getPosition() >0.9)){ //0.043973
+          //motor1.setVoltage(-0.25);
+          motor1.stopMotor();
           // BOOKMARK: 0.023 encoder, 0 velocity changed to 0.04 encoder into current
-        } else if(encoder.getPosition() < .04 && velocity < 0){
-          motor1.setVoltage(-0.18);
+        } else if(encoder.getPosition() < .045 && velocity < 0){
+          //motor1.setVoltage(-0.25);
+          motor1.stopMotor();
         } else {
+          //motor1.stopMotor();
           closedLoopController1.setReference(-velocity, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
         }
-      }
+        SmartDashboard.putNumber("Velocity", velocity);
+      }*/
     
     }
     SmartDashboard.putNumber("Arm Encoder", encoder.getPosition());
@@ -145,5 +163,8 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Is Manual Selected", manual);
+    SmartDashboard.putNumber("Joystic axis 1 output", RobotContainer.mech.getRawAxis(1));
+    
   }
 }

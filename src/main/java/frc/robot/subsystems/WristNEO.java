@@ -35,51 +35,83 @@ public class WristNEO extends SubsystemBase {
   private AbsoluteEncoder encoder;
   public boolean manual;
   double position;
-
+  boolean started;
   public WristNEO() {
 
     motor5 = new SparkMax(Constants.wristConstants.wristMotor5, MotorType.kBrushless);
-    //motor6 = new SparkMax(Constants.armConstants.armMotorID2, MotorType.kBrushless);
+   // motor6 = new SparkMax(Constants.armConstants.armMotorID2, MotorType.kBrushless);
     
 
-    //motor6.configure(Robot.neoConfigs.armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+   // motor6.configure(Robot.neoConfigs.armConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     motor5.configure(Robot.neoConfigs.wristConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
     closedLoopController = motor5.getClosedLoopController();
-    //closedLoopController6 = motor6.getClosedLoopController();
+    //closedLoopController = motor6.getClosedLoopController();
 
     encoder = motor5.getAbsoluteEncoder();
+   // encoder = motor6.getAbsoluteEncoder();
 
-    manual = false;
+
+    manual = true;
     position = encoder.getPosition();
-
+    started = true;
   }
 
   public void setPosition(){
+    //if (started){
+      if(manual){
+        //Down
+        if( (RobotContainer.mech.getPOV() < 90 || RobotContainer.mech.getPOV()> 270) && RobotContainer.mech.getPOV() != -1){
+          //Lower Limit
+          System.out.println("Lower");
+          while ((encoder.getPosition() < .41)){ //.579
+            closedLoopController.setReference(-500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+          }
+    
+          //UP
+        } else if ( (RobotContainer.mech.getPOV() < 270 && RobotContainer.mech.getPOV() > 90)){        
+            System.out.println("Increase")  ;    
+              //Check if past zero                 //Upper limit
+            while  (/*!(encoder.getPosition() >= .9) || */ !(encoder.getPosition() <.27)){
+              closedLoopController.setReference(500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+            }
+        } else {
+          closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
 
-    if(manual){
-      //Down
-      if( (RobotContainer.mech.getPOV() < 90 || RobotContainer.mech.getPOV()> 270) && RobotContainer.mech.getPOV() != -1){
-        if (!(encoder.getPosition() > .55)){
-          closedLoopController.setReference(-500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
         }
-  
-        //UP
-      } else if ( (RobotContainer.mech.getPOV() < 270 && RobotContainer.mech.getPOV() > 90)){
-        if (!(encoder.getPosition() >= .9) && !(encoder.getPosition() <.19)){
-          closedLoopController.setReference(500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
-       }
-      } else {
-        closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+      }else{
+        System.out.println("Wrist V: " + encoder.getVelocity());
+        if( encoder.getVelocity()<0 &&encoder.getPosition()<0.16){
+          closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
 
+        }
       }
-    }else{
-      System.out.println("Wrist V: " + encoder.getVelocity());
-      if( encoder.getVelocity()<0 &&encoder.getPosition()<0.16){
-        closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+   /* }else{
+    if(manual){
+        //Down
+        if( (RobotContainer.mech.getPOV() < 90 || RobotContainer.mech.getPOV()> 270) && RobotContainer.mech.getPOV() != -1){
+          if (!(encoder.getPosition() > .579)){ //.579
+            closedLoopController.setReference(-500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+          }
+    
+          //UP
+        } else if ( (RobotContainer.mech.getPOV() < 270 && RobotContainer.mech.getPOV() > 90)){
+          if (!(encoder.getPosition() <.378)){
+            closedLoopController.setReference(500, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+        }
+        } else {
+          closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
 
+        }
+      }else{
+        System.out.println("Wrist V: " + encoder.getVelocity());
+        if( encoder.getVelocity()<0 &&encoder.getPosition()<0.16){
+          closedLoopController.setReference(0, SparkBase.ControlType.kMAXMotionVelocityControl, ClosedLoopSlot.kSlot0);
+
+        }
       }
-    }
+    }*/
+
     SmartDashboard.putNumber("Wrist Enc Pos: ", encoder.getPosition());
     SmartDashboard.putNumber("Wrist Enc Vel: ", encoder.getVelocity());
 
@@ -94,7 +126,7 @@ public class WristNEO extends SubsystemBase {
   }
 
  
-
+  
   public void switchManualOn(){
     manual = true;
   }
@@ -103,6 +135,13 @@ public class WristNEO extends SubsystemBase {
     manual = false;
   }
 
+  public void switchStartedOn(){
+    started = true;
+  }
+
+  public void switchStartedOff(){
+    started = false;
+  }
   public void changePosition(double pos){
     position = pos;
   }
@@ -134,6 +173,7 @@ public class WristNEO extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Wrist Pose Value", encoder.getPosition());
   }
 }
 

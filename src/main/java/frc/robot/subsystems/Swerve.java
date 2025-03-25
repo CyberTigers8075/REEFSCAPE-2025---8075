@@ -39,8 +39,8 @@ public class Swerve extends SubsystemBase {
     public double rot;
     public boolean fieldRelative;
 
-    public double maxSpeed =7.5;
-    public double maxAngularVelocity = 5;
+    public double maxSpeed = 12;
+    public double maxAngularVelocity = 20;
 
     public Swerve() {
         gyro = new AHRS(AHRS.NavXComType.kMXP_SPI);

@@ -32,6 +32,8 @@ public class RobotContainer {
     public final static int rotationAxis = XboxController.Axis.kRightX.value;
     
     // Buttons
+    public static Trigger mech3 = new JoystickButton(mech, 3);
+    public static Trigger mech4 = new JoystickButton(mech, 4);
     public static Trigger mech5 = new JoystickButton(mech, 5);
     public static Trigger mech6 = new JoystickButton(mech, 6);
     public static Trigger mech7 = new JoystickButton(mech, 7);
@@ -81,7 +83,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        //driverA.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        driverA.onTrue(new InstantCommand(() -> s_Swerve.gyro.zeroYaw()));
         /* Arm Bindings */
         
         mech5.onTrue(new InstantCommand(() -> arm.switchManualOn()));
@@ -95,8 +97,10 @@ public class RobotContainer {
        /*  Wrist Bindings */
        mech5.onTrue(new InstantCommand(() -> wrist.switchManualOn()));
        mech6.onTrue(new InstantCommand(() -> wrist.switchManualOff()));
-        mech7.onTrue(new InstantCommand(() -> wrist.l2()));
-       mech8.onTrue(new InstantCommand(() -> wrist.l1()));
+       //mech3.onTrue(new InstantCommand(() -> wrist.switchStartedOn));
+       //mech4.onTrue(new InstantCommand(() -> wirst.switchStartedOff));
+       // mech7.onTrue(new InstantCommand(() -> wrist.l2()));
+      // mech8.onTrue(new InstantCommand(() -> wrist.l1()));
        //mech9.onTrue(new InstantCommand(() -> wrist.intake()));*/
         //mech10.onTrue(new InstantCommand(() -> wrist.l3()));
         //mech11.onTrue(new InstantCommand(() -> wrist.stow()));

@@ -24,8 +24,8 @@ public class SwerveModule {
     public TalonFX mDriveMotor;
     public DutyCycleEncoder angleEncoder;
 
-    public double maxSpeed = 7.5;
-    public double maxAngularVelocity = 5;
+    public double maxSpeed = 12;
+    public double maxAngularVelocity = 18;
 
     private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
